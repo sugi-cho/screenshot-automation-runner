@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "project": "fixture-project-cdp-fail",
+  "launch": {
+    "type": "command",
+    "command": "node -e \"setTimeout(() => {}, 30000)\""
+  },
+  "automation": {
+    "adapter": "playwright-cdp",
+    "cdpPort": 59999,
+    "connectTimeoutMs": 200,
+    "viewport": {
+      "width": 800,
+      "height": 600
+    }
+  },
+  "output": {
+    "dir": "test-output/screenshots",
+    "fileNameTemplate": "{index:02}-{name}.png",
+    "overwrite": true
+  },
+  "scenario": {
+    "name": "cdp-fail",
+    "steps": [
+      {
+        "id": "st-01",
+        "type": "wait",
+        "until": {
+          "kind": "timeout",
+          "ms": 10
+        }
+      }
+    ]
+  }
+}
