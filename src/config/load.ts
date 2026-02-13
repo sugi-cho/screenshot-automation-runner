@@ -174,7 +174,11 @@ function resolveOutputDir(baseDir: string, config: RunnerConfig): RunnerConfig {
   return next;
 }
 
-export async function loadConfig(configPath: string): Promise<RunnerConfig> {
+export type LoadConfigOptions = {
+  resolveBaseDir?: string;
+};
+
+export async function loadConfig(configPath: string, options?: LoadConfigOptions): Promise<RunnerConfig> {
   let raw: string;
   try {
     raw = await fs.readFile(configPath, "utf8");
@@ -196,5 +200,8 @@ export async function loadConfig(configPath: string): Promise<RunnerConfig> {
     throw new RunnerError(ExitCode.INVALID_CONFIG, `Config parse failed: ${String(error)}`);
   }
 
-  return resolveOutputDir(path.dirname(path.resolve(configPath)), parsed as RunnerConfig);
+  const baseDir = options?.resolveBaseDir
+    ? path.resolve(options.resolveBaseDir)
+    : path.dirname(path.resolve(configPath));
+  return resolveOutputDir(baseDir, parsed as RunnerConfig);
 }

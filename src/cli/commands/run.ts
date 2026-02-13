@@ -32,7 +32,9 @@ export async function runRunCommand(options: RunCommandOptions): Promise<number>
   let logger: Logger | undefined;
 
   try {
-    const config = await loadConfig(configPath);
+    const config = await loadConfig(configPath, {
+      resolveBaseDir: options.projectRoot ?? process.cwd()
+    });
     const validated = validateRunnerConfig(config);
     if (!validated.ok) {
       for (const issue of validated.issues) {
