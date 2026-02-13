@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "project": "UDP-OBS-Rec-and-Play-Tool",
+  "launch": {
+    "type": "command",
+    "command": "npm run dev:electron -- --remote-debugging-port=9222",
+    "cwd": "../UDP-OBS-Rec-and-Play-Tool",
+    "shell": "powershell",
+    "env": {
+      "NODE_ENV": "development"
+    }
+  },
+  "automation": {
+    "adapter": "playwright-cdp",
+    "cdpPort": 9222,
+    "connectTimeoutMs": 30000,
+    "viewport": {
+      "width": 1280,
+      "height": 1280
+    },
+    "headless": false
+  },
+  "output": {
+    "dir": "docs/screenshots",
+    "fileNameTemplate": "{index:02}-{name}.png",
+    "overwrite": true
+  },
+  "defaults": {
+    "stepTimeoutMs": 10000,
+    "retry": {
+      "attempts": 2,
+      "intervalMs": 800,
+      "backoff": "fixed"
+    },
+    "globalTimeoutMs": 180000
+  },
+  "scenario": {
+    "name": "readme-main",
+    "startupWait": [
+      {
+        "kind": "windowTitle",
+        "contains": "UDP-OBS"
+      },
+      {
+        "kind": "selector",
+        "selector": "role=tab[name='PLAY']",
+        "state": "visible"
+      }
+    ],
+    "steps": [
+      {
+        "id": "s01",
+        "type": "screenshot",
+        "name": "play-initial"
+      },
+      {
+        "id": "s02",
+        "type": "click",
+        "selector": "role=button[name='PRELOAD']"
+      },
+      {
+        "id": "s03",
+        "type": "wait",
+        "until": {
+          "kind": "text",
+          "contains": "PRELOADED"
+        }
+      },
+      {
+        "id": "s04",
+        "type": "screenshot",
+        "name": "play-preloaded"
+      },
+      {
+        "id": "s05",
+        "type": "click",
+        "selector": "role=button[name='PLAY']",
+        "onError": "continue"
+      },
+      {
+        "id": "s06",
+        "type": "wait",
+        "until": {
+          "kind": "text",
+          "contains": "PLAYING"
+        },
+        "onError": "continue"
+      },
+      {
+        "id": "s07",
+        "type": "screenshot",
+        "name": "play-playing",
+        "onError": "continue"
+      },
+      {
+        "id": "s08",
+        "type": "click",
+        "selector": "role=tab[name='REC']"
+      },
+      {
+        "id": "s09",
+        "type": "wait",
+        "until": {
+          "kind": "selector",
+          "selector": "text=REC",
+          "state": "visible"
+        }
+      },
+      {
+        "id": "s10",
+        "type": "screenshot",
+        "name": "rec-initial"
+      }
+    ]
+  }
+}

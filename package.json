@@ -1,0 +1,24 @@
+{
+  "name": "screenshot-autmation-runner",
+  "version": "1.0.0",
+  "description": "Reusable screenshot automation CLI for Electron apps",
+  "main": "dist/src/cli/index.js",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "npm run build && node scripts/run-tests.mjs",
+    "e2e:min": "npm run build && node scripts/run-e2e.mjs",
+    "verify:min": "npm run build && npm test && npm run e2e:min"
+  },
+  "bin": {
+    "sar": "bin/sar.js"
+  },
+  "keywords": [
+    "electron",
+    "screenshot",
+    "automation",
+    "cli"
+  ],
+  "author": "sugi-cho",
+  "license": "ISC",
+  "type": "module"
+}

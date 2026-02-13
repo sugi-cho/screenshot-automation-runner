@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "project": "fixture-project",
+  "launch": {
+    "type": "command",
+    "command": "node -e \"setTimeout(()=>{}, 5000)\""
+  },
+  "automation": {
+    "adapter": "playwright-cdp",
+    "cdpPort": 9222,
+    "connectTimeoutMs": 10000,
+    "viewport": {
+      "width": 800,
+      "height": 600
+    }
+  },
+  "output": {
+    "dir": "test-output/screenshots",
+    "fileNameTemplate": "{index:02}-{name}.png",
+    "overwrite": true
+  },
+  "scenario": {
+    "name": "minimal",
+    "steps": [
+      {
+        "id": "st-01",
+        "type": "wait",
+        "until": {
+          "kind": "timeout",
+          "ms": 10
+        }
+      },
+      {
+        "id": "st-02",
+        "type": "screenshot",
+        "name": "initial"
+      }
+    ]
+  }
+}
