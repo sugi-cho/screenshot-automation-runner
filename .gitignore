@@ -3,6 +3,7 @@ dist/
 test-output/
 docs/screenshots/
 docs/artifacts/
+.sar/*.local.json
 *.log
 .DS_Store
 Thumbs.db

@@ -19,15 +19,26 @@ export async function createPlaywrightCdpAdapter(
 ): Promise<AutomationAdapter> {
   const endpoint = `http://127.0.0.1:${options.cdpPort}`;
   let browser: Browser;
+  const deadline = Date.now() + options.connectTimeoutMs;
+  let lastError: unknown;
 
-  try {
-    browser = await chromium.connectOverCDP(endpoint, {
-      timeout: options.connectTimeoutMs
-    });
-  } catch (error) {
-    throw new RunnerError(ExitCode.CDP_CONNECT_FAILED, `CDP connect failed: ${String(error)}`, {
-      endpoint
-    });
+  for (;;) {
+    const remaining = deadline - Date.now();
+    if (remaining <= 0) {
+      throw new RunnerError(ExitCode.CDP_CONNECT_FAILED, `CDP connect failed: ${String(lastError)}`, {
+        endpoint
+      });
+    }
+
+    try {
+      browser = await chromium.connectOverCDP(endpoint, {
+        timeout: Math.min(remaining, 3_000)
+      });
+      break;
+    } catch (error) {
+      lastError = error;
+      await delay(250);
+    }
   }
 
   const context: BrowserContext =
