@@ -23,6 +23,31 @@ Electronアプリ本体を改修せず、README用スクリーンショットを
 
 ## サンプル設定
 - `.sar/udp-obs-readme.json`
+- `docs/examples/github-consumer-config.sample.json`
+
+## GitHub経由で使う手順（他プロジェクト）
+対象プロジェクト側に設定ファイル（例: `.sar/screenshot.json`）を置き、runnerを取得して実行します。
+
+```powershell
+# 1) 対象プロジェクトのルートへ移動
+cd C:\path\to\your-electron-project
+
+# 2) runner を tools 配下へ clone
+git clone https://github.com/sugi-cho/screenshot-automation-runner.git .tools/screenshot-automation-runner
+
+# 3) runner をビルド
+npm --prefix .tools/screenshot-automation-runner ci
+npm --prefix .tools/screenshot-automation-runner run build
+
+# 4) 設定検証
+node .tools/screenshot-automation-runner/dist/src/cli/index.js validate -c .sar/screenshot.json
+
+# 5) dry-run
+node .tools/screenshot-automation-runner/dist/src/cli/index.js run -c .sar/screenshot.json --project-root . --dry-run --verbose
+
+# 6) 実撮影
+node .tools/screenshot-automation-runner/dist/src/cli/index.js run -c .sar/screenshot.json --project-root . --verbose
+```
 
 ## トラブルシュート
 1. `CDP_CONNECT_FAILED (21)` になる

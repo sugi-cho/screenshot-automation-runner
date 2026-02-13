@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "project": "your-electron-app",
+  "launch": {
+    "type": "command",
+    "command": "npm run start -- --remote-debugging-port=9222",
+    "cwd": ".",
+    "env": {
+      "NODE_ENV": "production"
+    }
+  },
+  "automation": {
+    "adapter": "playwright-cdp",
+    "cdpPort": 9222,
+    "connectTimeoutMs": 30000,
+    "viewport": {
+      "width": 1280,
+      "height": 1280
+    },
+    "headless": false
+  },
+  "output": {
+    "dir": "docs/screenshots",
+    "fileNameTemplate": "{index:02}-{name}.png",
+    "overwrite": true
+  },
+  "defaults": {
+    "stepTimeoutMs": 10000,
+    "retry": {
+      "attempts": 2,
+      "intervalMs": 800,
+      "backoff": "fixed"
+    },
+    "globalTimeoutMs": 180000
+  },
+  "scenario": {
+    "name": "readme-main",
+    "startupWait": [
+      {
+        "kind": "selector",
+        "selector": "#tab-play",
+        "state": "visible"
+      }
+    ],
+    "steps": [
+      {
+        "id": "s01",
+        "type": "screenshot",
+        "name": "play-initial"
+      },
+      {
+        "id": "s02",
+        "type": "click",
+        "selector": "#preload"
+      },
+      {
+        "id": "s03",
+        "type": "wait",
+        "until": {
+          "kind": "text",
+          "contains": "Ready",
+          "selector": "#play-note"
+        }
+      },
+      {
+        "id": "s04",
+        "type": "screenshot",
+        "name": "play-preloaded"
+      },
+      {
+        "id": "s05",
+        "type": "click",
+        "selector": "#play",
+        "onError": "continue"
+      },
+      {
+        "id": "s06",
+        "type": "wait",
+        "until": {
+          "kind": "text",
+          "contains": "Playing",
+          "selector": "#play-note"
+        },
+        "onError": "continue"
+      },
+      {
+        "id": "s07",
+        "type": "screenshot",
+        "name": "play-playing",
+        "onError": "continue"
+      },
+      {
+        "id": "s08",
+        "type": "click",
+        "selector": "#tab-rec"
+      },
+      {
+        "id": "s09",
+        "type": "wait",
+        "until": {
+          "kind": "selector",
+          "selector": "#view-rec.active",
+          "state": "visible"
+        }
+      },
+      {
+        "id": "s10",
+        "type": "screenshot",
+        "name": "rec-initial"
+      }
+    ]
+  }
+}
